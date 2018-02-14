@@ -2,6 +2,12 @@ package hw2;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Observer;
+import java.util.Observable;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -26,6 +32,7 @@ public class OceanExplorer extends Application{
 	Scene scene;
 	Ship ship;
 	PirateShip pirateShip;
+	//List<Observer> observers = new LinkedList<Observer>(); // my list of observer pirates
 	
 	@Override
 	public void start(Stage mapStage) throws Exception {
@@ -39,7 +46,7 @@ public class OceanExplorer extends Application{
 		ship = new Ship(oceanMap);	
 		loadShipImage();
 		
-		pirateShip = new PirateShip(oceanMap); //my pirate
+		pirateShip = new PirateShip(oceanMap, this); //my pirate
 		loadPirateShipImage();
 		
 		ship.addObserver(pirateShip); // me adding a pirate observer
@@ -59,12 +66,17 @@ public class OceanExplorer extends Application{
 		root.getChildren().add(shipImageView);
 	}
     
-    private void loadPirateShipImage() { //my function
+    public void loadPirateShipImage() { //my function
     	Image pirateShipImage = new Image("pirateShip.png",50,50,true,true);
     	pirateShipImageView = new ImageView(pirateShipImage);
-    	pirateShipImageView.setX(0);
-    	pirateShipImageView.setY(0);
+    	pirateShipImageView.setX(pirateShip.pirateShipPosition.x);
+    	pirateShipImageView.setY(pirateShip.pirateShipPosition.y);
     	root.getChildren().add(pirateShipImageView);    	
+    }
+    
+    public void movePirateShipImage() { //my function
+    	//pirateShipImageView.setX(value);
+    	//pirateShipImageView.setY(value);
     }
 	
 	private void startSailing(){
@@ -90,6 +102,7 @@ public class OceanExplorer extends Application{
 				}
 				shipImageView.setX(ship.getShipLocation().x*scalingFactor);
 				shipImageView.setY(ship.getShipLocation().y*scalingFactor);
+				
 			}
 		});
 	}
@@ -108,6 +121,7 @@ public class OceanExplorer extends Application{
 			}
 		}
 	}
+	
 	
 	public static void main(String[] args) {
      	launch(args);
